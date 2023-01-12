@@ -1,12 +1,12 @@
 const Imap = require('imap')
 const mailparser = require('mailparser').simpleParser
-const { email, password } = require('../../config.json');
+const { email, password, host, port, tls } = require('../../config.json');
 const imap = new Imap({
     user: email,
     password: password,
-    host: 'imap.gmail.com',
-    port: 993,
-    tls: true
+    host: host,
+    port: port,
+    tls: tls
 })
 
 imap.connect()
@@ -25,20 +25,18 @@ function teste() {
                 imap.on('mail', (numNewMsgs) => {
                     console.log(numNewMsgs + ' new message(s)')
                     fetchEmails().then((result) => {
-                        console.log(result);
                         resolve(result)
                     });
                 })
             })
         });
-        
+
 
         function fetchEmails() {
             return new Promise((resolve, reject) => {
                 imap.search(['UNSEEN'], (err, results) => {
                     if (err) throw err
                     if (!results.length) {
-                        console.log('No unread messages found!');
                         return
                     }
 
@@ -58,7 +56,7 @@ function teste() {
                                             return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
                                         })
                                     }
-                                    resolve(filterItens('https')[1])
+                                    resolve(filterItens('https')[2])
                                 })
                         })
                     })
@@ -68,8 +66,4 @@ function teste() {
     })
 }
 
-// console.log(teste())
 module.exports = teste
-
-
-// console.log(teste())

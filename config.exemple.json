@@ -3,5 +3,8 @@
 	"clientId": "YOU USER ID",
 	"guildId": "USER ID SERVER",
 	"email": "EMAIL",
-	"password": "SENHA"
+	"password": "SENHA",
+	"host": "outlook.office365.com",
+	"port": 993,
+    "tls": true
 }

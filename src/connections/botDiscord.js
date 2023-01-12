@@ -2,7 +2,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('../../config.json');
-const teste = require('./emailGmail')
+const emailOutlook = require('./emailOutlook');
+
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
@@ -11,11 +12,10 @@ module.exports = function botDiscord() {
         console.log(`Ready! Logged in as ${c.user.tag}`);
     });
 
-    teste().then(res => {
+    emailOutlook().then(res => {
         console.log(res)
         client.channels.cache.get('1058449545488506982').send(res)
     })
-
 
     client.login(token);
 
@@ -37,7 +37,6 @@ module.exports = function botDiscord() {
 
     client.on(Events.InteractionCreate, async interaction => {
         if (!interaction.isChatInputCommand()) return;
-        // console.log(interaction);
 
         const command = interaction.client.commands.get(interaction.commandName);
 

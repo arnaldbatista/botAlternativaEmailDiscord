@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('discord.js');
-const fetchEmails = require('../connections/emailGmail')
+const fetchEmails  = require('../connections/emailOutlook')
 
 module.exports = {
 	data: new SlashCommandBuilder()

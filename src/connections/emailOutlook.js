@@ -17,7 +17,7 @@ imap.on('error', err => {
 })
 
 
-function teste() {
+function emailOutlook() {
     return new Promise((resolve, reject) => {
         imap.once('ready', function () {
             imap.openBox('INBOX', true, (err, box) => {
@@ -66,4 +66,4 @@ function teste() {
     })
 }
 
-module.exports = teste
+module.exports = emailOutlook

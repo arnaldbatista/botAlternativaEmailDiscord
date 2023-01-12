@@ -8,49 +8,57 @@ const imap = new Imap({
     tls: true
 })
 
-imap.once('ready', function () {
-    imap.openBox('INBOX', true, function (err, box) {
-        if (err) throw err
-        imap.on('mail', function (numNewMsgs) {
-            console.log(numNewMsgs + ' new message(s)')
-            fetchEmails()
+module.exports = function teste() {
+    imap.once('ready', function () {
+        imap.openBox('INBOX', true, function (err, box) {
+            if (err) throw err
+            imap.on('mail', function (numNewMsgs) {
+                console.log(numNewMsgs + ' new message(s)')
+                fetchEmails().then((result) => result)
+            });
         });
     });
-});
+    
+    imap.connect()
+    
+    imap.on('error', err => {
+        console.log(err)
+        imap.connect()
+    })
+    
+    function fetchEmails() {
+        return new Promise((resolve, reject) => {
+            imap.search(['UNSEEN'], function (err, results) {
+                if (err) throw err
+                if (!results.length) {
+                    console.log('No unread messages found!');
+                    return
+                }
+                const checkEmail = imap.fetch(results, { bodies: '' })
+                checkEmail.on('message', function (msg, seqno) {
+                    msg.on('body', function (stream, info) {
+                        mailparser(stream)
+                            .then(email => {
+                                const linkEmail = JSON.stringify(
+                                    JSON.stringify(
+                                        JSON.stringify(email.html)
+                                            .split('"')
+                                    )
+                                        .split("\\")
+                                )
+                                    .split('"')
+    
+                                function filterItens(filterByHttps) {
+                                    return linkEmail.filter(el => {
+                                        return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
+                                    })
+                                }
 
-imap.connect()
-
-function fetchEmails() {
-    imap.search(['UNSEEN'], function (err, results) {
-        if (err) throw err
-        if (!results.length) {
-            console.log('No unread messages found!');
-            return
-        }
-        var f = imap.fetch(results, { bodies: '' })
-        f.on('message', function (msg, seqno) {
-            msg.on('body', function (stream, info) {
-                mailparser(stream)
-                    .then(email => {
-                        // let emailBody = JSON.stringify(email.html)
-                        // const linksArray = emailBody.split('"')
-                        // const linkTxt = JSON.stringify(linksArray)
-                        // const nome = linkTxt.split("\\")
-                        // const nome1 = JSON.stringify(nome)
-                        // const nome2 = nome1.split('"')
-
-                        const teste22 = JSON.stringify(JSON.stringify(JSON.stringify(email.html).split('"')).split("\\")).split('"')
-
-
-                        function filterItens(query) {
-                            return teste22.filter(function(el) {
-                                return el.toLocaleLowerCase().indexOf(query.toLocaleLowerCase()) > -1
+                                resolve = filterItens('https')[1]
                             })
-                        }
-
-                        console.log(filterItens('https')[5])
                     })
+                })
             })
         })
-    })
+    }
 }

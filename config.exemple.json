@@ -1,5 +1,7 @@
 {
 	"token": "TOKEN DISCORD",
 	"clientId": "YOU USER ID",
-	"guildId": "USER ID SERVER"
+	"guildId": "USER ID SERVER",
+	"email": "EMAIL",
+	"password": "SENHA"
 }

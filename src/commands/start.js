@@ -10,6 +10,6 @@ module.exports = {
 
 		console.log(teste)
 
-		await interaction.reply('bot iniciado')
+		await interaction.reply('bot iniciado' + teste)
 	},
 }

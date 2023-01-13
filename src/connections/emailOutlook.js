@@ -56,6 +56,7 @@ function emailOutlook() {
                                             return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
                                         })
                                     }
+                                                                        
                                     resolve(filterItens('https')[2])
                                 })
                         })

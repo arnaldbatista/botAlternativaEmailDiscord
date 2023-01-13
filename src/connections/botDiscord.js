@@ -3,6 +3,7 @@ const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('../../config.json');
 const emailOutlook = require('./emailOutlook');
+const { setInterval } = require('node:timers');
 
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -11,15 +12,48 @@ module.exports = function botDiscord() {
     client.once(Events.ClientReady, c => {
         console.log(`Ready! Logged in as ${c.user.tag}`);
     });
-
-    emailOutlook().then(res => {
-        console.log(res)
-        client.channels.cache.get('1058449545488506982').send(res)
-    })
-
+    
     client.login(token);
-
+    
     client.commands = new Collection();
+    
+    function teste2() {
+        console.log('2 - chamando o teste()')
+        teste()
+    }
+    function teste() {
+        console.log('3 - inicio do teste()')
+
+
+        emailOutlook().then(res => {
+            console.log('inicio do res =>')
+            // console.log(res)
+            // client.channels.cache.get('1058449545488506982').send(res.link)
+            let teste = []
+            teste.push(res)
+    
+            setInterval(() => {
+                if(teste.length !== 0){
+                    console.log(teste)
+                    teste.splice(0)
+                    console.log('dentro do loop')
+                    clearInterval()
+                    console.log('clearInterval()')
+                    teste2()
+                    console.log('dps de chamar o teste2')
+                }
+            }, 1000) 
+            console.log('final do res =>')
+            return           
+        })
+
+        
+        console.log('4 - final do teste()')
+    }
+    console.log('1 - chamando o teste2')
+    teste2()
+
+
 
     const commandsPath = path.join(__dirname, '..', 'commands');
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));

@@ -93,7 +93,7 @@ module.exports = function botDiscord() {
                                                 })
                                             }
 
-                                            resolve(filterItens('https')[2])
+                                            resolve(filterItens('https')[1])
                                         })
                                 })
                             })
@@ -103,23 +103,4 @@ module.exports = function botDiscord() {
             })
         })
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

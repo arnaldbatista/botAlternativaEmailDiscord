@@ -65,11 +65,10 @@ module.exports = function botDiscord() {
     imap.once('ready', function () {
         imap.openBox('INBOX', true, (err, box) => {
             if (err) throw err
-            imap.on('mail', (numNewMsgs) => {
+            imap.on('mail', numNewMsgs => {
                 console.log(numNewMsgs + ' new message(s)')
 
-                fetchEmails().then((result) => {
-                    console.log(result)
+                fetchEmails().then(result => {
                     client.channels.cache.get('1058449545488506982').send(result)
                 })
 
@@ -96,11 +95,11 @@ module.exports = function botDiscord() {
                                         const subject = newArray.filter(arrayPosition => arrayPosition.includes('Subject:'))[0]
 
                                         resolve(`${subject}, ${link}`)
-                                    })
 
-                                    // mover os emails da pasta principal para outra
-                                    imap.move(results, 'DRAFTS', err => {
-                                        if (err) console.log(err)
+                                        // mover os emails da pasta principal para outra
+                                        imap.move(results, 'DRAFTS', err => {
+                                            if (err) console.log(err)
+                                        })
                                     })
                                 })
                             })

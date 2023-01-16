@@ -1,6 +1,7 @@
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js')
 const mailparser = require('mailparser').simpleParser
 const Imap = require('imap')
+const { assert } = require('node:console')
 const fs = require('node:fs')
 const path = require('node:path')
 
@@ -69,6 +70,7 @@ module.exports = function botDiscord() {
                 console.log(numNewMsgs + ' new message(s)')
 
                 fetchEmails().then((result) => {
+                    console.log(result)
                     client.channels.cache.get('1058449545488506982').send(result)
                 })
 
@@ -77,8 +79,8 @@ module.exports = function botDiscord() {
                         imap.search(['UNSEEN'], (err, results) => {
                             if (err) throw err
 
+                            // filtro para achar links
                             const checkEmail = imap.fetch(results, { bodies: '' })
-
                             checkEmail.on('message', (msg, seqno) => {
                                 msg.on('body', (stream, info) => {
                                     mailparser(stream).then(email => {
@@ -93,9 +95,15 @@ module.exports = function botDiscord() {
                                                 return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
                                             })
                                         }
+                                        
+                                        // pegar o assunto do email
+                                        const newArray = JSON.stringify(email.html).split('<br>')
+                                        const subject = newArray.filter(arrayPosition => arrayPosition.includes('Subject:'))[0]
 
-                                        resolve(filterItens('https')[1])
-    
+
+                                        resolve(`${subject}, ${filterItens('https')[2]}`)
+                                        
+                                        // mover os emails da pasta principal para outra
                                         imap.move(results, 'DRAFTS', err => {
                                             if (err) console.log(err)
                                         })

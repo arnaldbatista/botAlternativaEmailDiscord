@@ -4,7 +4,7 @@ const Imap = require('imap')
 const fs = require('node:fs')
 const path = require('node:path')
 
-const { email, password, host, port, tls, token } = require('../../config.json');
+const { email, password, host, port, tls, token } = require('../../config.json')
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 const imap = new Imap({
@@ -70,31 +70,36 @@ module.exports = function botDiscord() {
 
                 fetchEmails().then((result) => {
                     client.channels.cache.get('1058449545488506982').send(result)
-                });
+                })
 
                 function fetchEmails() {
                     return new Promise((resolve, reject) => {
                         imap.search(['UNSEEN'], (err, results) => {
+                            if (err) throw err
+
                             const checkEmail = imap.fetch(results, { bodies: '' })
 
                             checkEmail.on('message', (msg, seqno) => {
                                 msg.on('body', (stream, info) => {
-                                    mailparser(stream)
-                                        .then(email => {
-                                            const linkEmail = JSON.stringify(
-                                                JSON.stringify(
-                                                    JSON.stringify(email.html).split('"')
-                                                ).split("\\")
-                                            ).split('"')
+                                    mailparser(stream).then(email => {
+                                        const linkEmail = JSON.stringify(
+                                            JSON.stringify(
+                                                JSON.stringify(email.html).split('"')
+                                            ).split("\\")
+                                        ).split('"')
 
-                                            function filterItens(filterByHttps) {
-                                                return linkEmail.filter(el => {
-                                                    return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
-                                                })
-                                            }
+                                        function filterItens(filterByHttps) {
+                                            return linkEmail.filter(el => {
+                                                return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
+                                            })
+                                        }
 
-                                            resolve(filterItens('https')[1])
+                                        resolve(filterItens('https')[1])
+    
+                                        imap.move(results, 'DRAFTS', err => {
+                                            if (err) console.log(err)
                                         })
+                                    })
                                 })
                             })
                         })

@@ -1,7 +1,6 @@
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js')
 const mailparser = require('mailparser').simpleParser
 const Imap = require('imap')
-const { assert } = require('node:console')
 const fs = require('node:fs')
 const path = require('node:path')
 
@@ -90,23 +89,18 @@ module.exports = function botDiscord() {
                                             ).split("\\")
                                         ).split('"')
 
-                                        function filterItens(filterByHttps) {
-                                            return linkEmail.filter(el => {
-                                                return el.toLocaleLowerCase().indexOf(filterByHttps.toLocaleLowerCase()) > -1
-                                            })
-                                        }
-                                        
+                                        const link = linkEmail.filter(el => el.toLocaleLowerCase().indexOf('https'.toLocaleLowerCase()) > -1)[2]
+
                                         // pegar o assunto do email
                                         const newArray = JSON.stringify(email.html).split('<br>')
                                         const subject = newArray.filter(arrayPosition => arrayPosition.includes('Subject:'))[0]
 
+                                        resolve(`${subject}, ${link}`)
+                                    })
 
-                                        resolve(`${subject}, ${filterItens('https')[2]}`)
-                                        
-                                        // mover os emails da pasta principal para outra
-                                        imap.move(results, 'DRAFTS', err => {
-                                            if (err) console.log(err)
-                                        })
+                                    // mover os emails da pasta principal para outra
+                                    imap.move(results, 'DRAFTS', err => {
+                                        if (err) console.log(err)
                                     })
                                 })
                             })

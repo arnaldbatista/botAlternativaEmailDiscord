@@ -99,11 +99,11 @@ module.exports = function botDiscord() {
                                         const afterConstructorName = constructorName.filter(arrayPosition => arrayPosition.includes('Olá'))[0]
                                         const name = afterConstructorName.match(/([A-Za-z]+)/g)
 
-                                        resolve(`**Existe um novo email:**
-Usuário: ${'`'}${name[1]}.${name[2]}.${name[3]}${'`'}
-Motivo: ${subject}:
+                                        resolve(`**🚨Existe um novo email🚨**
+👤 **Usuário:** ${'`'}${name[1]}.${name[2]}.${name[3]}${'`'}
+🚧 **Motivo:** ${'`'}${subject}:${'`'}
 
-Acesse:
+🔗 **Acesse:**
 ${link}
 `)
 

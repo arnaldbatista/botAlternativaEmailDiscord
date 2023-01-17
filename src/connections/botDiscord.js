@@ -82,26 +82,14 @@ module.exports = function botDiscord() {
                             checkEmail.on('message', (msg, seqno) => {
                                 msg.on('body', (stream, info) => {
                                     mailparser(stream).then(email => {
-                                        const linkEmail = JSON.stringify(
-                                            JSON.stringify(
-                                                JSON.stringify(email.html).split('"')
-                                            ).split("\\")
-                                        ).split('"')
+                                        const linkEmail = JSON.stringify(JSON.stringify(JSON.stringify(email.html).split('"')).split("\\")).split('"')
+                                        const link = linkEmail.filter(el => el.toLocaleLowerCase().indexOf('https'.toLocaleLowerCase()) > -1)[4]
 
-                                        const link = linkEmail.filter(el => el.toLocaleLowerCase().indexOf('https'.toLocaleLowerCase()) > -1)[2]
-
-                                        // pegar o assunto do email
-                                        const newArray = JSON.stringify(email.html).split('<br>')
-                                        const subject = newArray.filter(arrayPosition => arrayPosition.includes('Subject:'))[0].split(':')[1]
-                                        
-                                        // pegar nome do usuario
-                                        const constructorName = JSON.stringify(JSON.stringify(JSON.stringify(newArray).split('<span>')).split('</span>')).split('\\">')
-                                        const afterConstructorName = constructorName.filter(arrayPosition => arrayPosition.includes('Olá'))[0]
-                                        const name = afterConstructorName.match(/([A-Za-z]+)/g)
+                                        const user = JSON.stringify(JSON.stringify(JSON.stringify(email.textAsHtml).split(' ')).split('!')).split(',')[2].split('"')[1]
 
                                         resolve(`**🚨Existe um novo email🚨**
-👤 **Usuário:** ${'`'}${name[1]}.${name[2]}.${name[3]}${'`'}
-🚧 **Motivo:** ${'`'}${subject}:${'`'}
+👤 **Usuário:** ${'`'}${user}${'`'}
+🚧 **Motivo:** ${'`'}${email.subject}:${'`'}
 
 🔗 **Acesse:**
 ${link}

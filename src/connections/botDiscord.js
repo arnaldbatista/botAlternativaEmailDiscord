@@ -92,9 +92,20 @@ module.exports = function botDiscord() {
 
                                         // pegar o assunto do email
                                         const newArray = JSON.stringify(email.html).split('<br>')
-                                        const subject = newArray.filter(arrayPosition => arrayPosition.includes('Subject:'))[0]
+                                        const subject = newArray.filter(arrayPosition => arrayPosition.includes('Subject:'))[0].split(':')[1]
+                                        
+                                        // pegar nome do usuario
+                                        const constructorName = JSON.stringify(JSON.stringify(JSON.stringify(newArray).split('<span>')).split('</span>')).split('\\">')
+                                        const afterConstructorName = constructorName.filter(arrayPosition => arrayPosition.includes('Olá'))[0]
+                                        const name = afterConstructorName.match(/([A-Za-z]+)/g)
 
-                                        resolve(`${subject}, ${link}`)
+                                        resolve(`**Existe um novo email:**
+Usuário: ${'`'}${name[1]}.${name[2]}.${name[3]}${'`'}
+Motivo: ${subject}:
+
+Acesse:
+${link}
+`)
 
                                         // mover os emails da pasta principal para outra
                                         imap.move(results, 'DRAFTS', err => {

@@ -12,11 +12,15 @@ Como gerencio um grupos de contas do Discord para uma empresa, às vezes preciso
   ![NodeJS](https://img.shields.io/badge/-NodeJS-333333?style=flat&logo=nodedotjs)
   ![DiscordJS](https://img.shields.io/badge/-DiscordJS-333333?style=flat&logo=discord)
   
+  * Para me conectar ao email, estou usando o Imap
+  * Para checar os emails de dentro da caixa de entrada, estou usando o: mailparser
+  * Ambos são modulos que podem ser instalados usando o npm ou yanr
+  
 **DevOps**
 
   ![Git](https://img.shields.io/badge/-Git-333333?style=flat&logo=git)
   ![GitHub](https://img.shields.io/badge/-GitHub-333333?style=flat&logo=github)
-
+  
 **Ferramentas de Desenvolvimento**
 
   ![Visual Studio Code](https://img.shields.io/badge/-Visual%20Studio%20Code-333333?style=flat&logo=visual-studio-code&logoColor=007ACC)

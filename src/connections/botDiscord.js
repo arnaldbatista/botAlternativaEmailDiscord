@@ -1,4 +1,4 @@
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js')
+const { Client, Collection, Events, GatewayIntentBits,ActionRowBuilder, ButtonBuilder, ButtonStyle, EmbedBuilder } = require('discord.js')
 const mailparser = require('mailparser').simpleParser
 const Imap = require('imap')
 const fs = require('node:fs')
@@ -69,7 +69,13 @@ module.exports = function botDiscord() {
                 console.log(numNewMsgs + ' new message(s)')
 
                 fetchEmails().then(result => {
-                    client.channels.cache.get('1058449545488506982').send(result)
+                        const embed = new EmbedBuilder()
+                        .setColor(0x0099FF)
+                        .setTitle(result[0])
+                        .setURL(result[2])
+                        .setDescription(result[1])
+
+                        client.channels.cache.get('1058449545488506982').send({embeds: [embed]})
                 })
 
                 function fetchEmails() {
@@ -87,13 +93,11 @@ module.exports = function botDiscord() {
 
                                         const user = JSON.stringify(JSON.stringify(JSON.stringify(email.textAsHtml).split(' ')).split('!')).split(',')[2].split('"')[1]
 
-                                        resolve(`**🚨Existe um novo email🚨**
-👤 **Usuário:** ${'`'}${user}${'`'}
-🚧 **Motivo:** ${'`'}${email.subject}:${'`'}
-
-🔗 **Acesse:**
-${link}
-`)
+                                        resolve(['**🚨Existe um novo email🚨**',
+                                        `👤 **Usuário:** ${'`'}${user}${'`'}
+                                        🚧 **Motivo:** ${'`'}${email.subject}:${'`'}
+                                        `, 
+                                        link])
 
                                         // mover os emails da pasta principal para outra
                                         imap.move(results, 'DRAFTS', err => {

@@ -93,9 +93,9 @@ module.exports = function botDiscord() {
 
                                         const user = JSON.stringify(JSON.stringify(JSON.stringify(email.textAsHtml).split(' ')).split('!')).split(',')[2].split('"')[1]
 
-                                        resolve(['**🚨Existe um novo email🚨**',
+                                        resolve(['.................................**🚨Existe um novo email🚨**.................................',
                                         `👤 **Usuário:** ${'`'}${user}${'`'}
-                                        🚧 **Motivo:** ${'`'}${email.subject}:${'`'}
+                                        🚧 **Motivo:** ${'`'}${email.subject}${'`'}
                                         `, 
                                         link])
 

@@ -1,3 +1,3 @@
-const botDiscord = require('./src/connections/botDiscord')
+const { botDiscordTeste } = require('./src/connections/conectDiscord')
 
-botDiscord()
+botDiscordTeste()

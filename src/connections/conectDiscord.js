@@ -1,13 +1,10 @@
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js')
-const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 const fs = require('node:fs')
 const path = require('node:path')
 
 const conectEmail = require('./conetEmail')
 
-client.once(Events.ClientReady, c => {
-    console.log(`Ready! Logged in as ${c.user.tag}`)
-})
+const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 
 client.commands = new Collection()
 

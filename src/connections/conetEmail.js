@@ -30,7 +30,7 @@ imap.on('error', err => {
 
 module.exports = function conectEmail() {
     imap.once('ready', function () {
-        imap.openBox('INBOX', true, (err, box) => {
+        imap.openBox('INBOX', true, (err) => {
             if (err) throw err
             imap.on('mail', numNewMsgs => {
                 console.log(numNewMsgs + ' new message(s)')
@@ -52,8 +52,8 @@ module.exports = function conectEmail() {
 
                             // filtro para achar links
                             const checkEmail = imap.fetch(results, { bodies: '' })
-                            checkEmail.on('message', (msg, seqno) => {
-                                msg.on('body', (stream, info) => {
+                            checkEmail.on('message', (msg) => {
+                                msg.on('body', (stream) => {
                                     mailparser(stream).then(email => {
                                         const linkEmail = JSON.stringify(JSON.stringify(JSON.stringify(email.html).split('"')).split("\\")).split('"')
                                         const link = linkEmail.filter(el => el.toLocaleLowerCase().indexOf('https'.toLocaleLowerCase()) > -1)[4]
